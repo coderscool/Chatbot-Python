@@ -9,6 +9,9 @@ from keras.models import Sequential
 from keras.layers import Dense, Activation, Dropout
 from keras.optimizers import SGD
 import random
+from googletrans import Translator  # Install this library using: pip install googletrans==4.0.0-rc1
+
+translator = Translator()
 
 words=[]
 classes = []
@@ -17,23 +20,27 @@ ignore_words = ['?', '!']
 data_file = open('intents.json').read()
 intents = json.loads(data_file)
 
+def translate_to_english(sentence):
+    translation = translator.translate(sentence, src='en', dest='vi')
+    return translation.text
 
 for intent in intents['intents']:
     for pattern in intent['patterns']:
         w = nltk.word_tokenize(pattern)
         words.extend(w)
         documents.append((w, intent['tag']))
-
+        
+        w_en = nltk.word_tokenize(translate_to_english(pattern))
+        w_en = [lemmatizer.lemmatize(word.lower()) for word in w_en]
+        words.extend(w_en)
+        documents.append((w_en, intent['tag']))
+        
         if intent['tag'] not in classes:
             classes.append(intent['tag'])
 
 words = [lemmatizer.lemmatize(w.lower()) for w in words if w not in ignore_words]
 words = sorted(list(set(words)))
 classes = sorted(list(set(classes)))
-print (len(documents), "documents")
-print (len(classes), "classes", classes)
-print (len(words), "unique lemmatized words", words)
-
 
 pickle.dump(words,open('words.pkl','wb'))
 pickle.dump(classes,open('classes.pkl','wb'))

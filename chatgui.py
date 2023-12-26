@@ -3,6 +3,7 @@ from nltk.stem import WordNetLemmatizer
 lemmatizer = WordNetLemmatizer()
 import pickle
 import numpy as np
+import webbrowser
 
 from keras.models import load_model
 model = load_model('chatbot_model.h5')
@@ -55,22 +56,39 @@ def getResponse(ints, intents_json):
     return result
 
 def chatbot_response(msg):
-    ints = predict_class(msg, model)
-    if(len(ints)==0):
-        res = 'I dont ask'
-        create()
-        return res
-    else:
-        res = getResponse(ints, intents)
-        return res
-
+    try:
+        ints = predict_class(msg, model)
+        if not ints:
+            res = 'Tôi không hiểu. Bạn muốn thêm dữ liệu mới hay đặt câu hỏi?'
+            messagebox.showinfo("Lựa chọn", res)
+            option = simpledialog.askstring("Lựa chọn", "Nhập 'add' để thêm dữ liệu mới, 'query' để đặt câu hỏi")
+            if option.lower() == 'add':
+                create()
+                res = 'Dữ liệu đã được thêm thành công!'
+            elif option.lower() == 'query':
+                search_google(msg)
+                res = 'Tìm kiếm trên Google với từ khoá: "{}"'.format(msg)
+            else:
+                res = 'Lựa chọn không hợp lệ. Vui lòng nhập "add" hoặc "query".'
+            return res
+        else:
+            res = getResponse(ints, intents)
+            return res
+    except Exception as e:
+        return 'Đã xảy ra lỗi: {}'.format(str(e))
 
 import tkinter
 from tkinter import *
 from tkinter import simpledialog
 from tkinter import messagebox
 
-
+def search_google(query):
+    try:
+        search_url = "https://www.google.com/search?q={}".format(query)
+        webbrowser.open(search_url)
+    except Exception as e:
+        messagebox.showerror("Lỗi", "Đã xảy ra lỗi: {}".format(str(e)))
+    
 def send():
     msg = EntryBox.get("1.0",'end-1c').strip()
     EntryBox.delete("0.0",END)
@@ -87,24 +105,33 @@ def send():
         ChatLog.yview(END)
  
 def create():
-    tag = simpledialog.askstring("Enter infor", "What is your tag name")
-    question = simpledialog.askstring("Enter infor", "What is your question")
-    result = simpledialog.askstring("Enter infor", "Please give us your answer")
-    addFileJson(question, result, tag)
+    try:
+        tag = simpledialog.askstring("Nhập thông tin", "Nhập tên của bạn")
+        question = simpledialog.askstring("Nhập thông tin", "Nhập câu hỏi của bạn")
+        result = simpledialog.askstring("Nhập thông tin", "Vui lòng cung cấp câu trả lời của bạn")
+        if tag and question and result:
+            addFileJson(question, result, tag)
+        else:
+            messagebox.showwarning("Cảnh báo", "Vui lòng nhập đầy đủ thông tin.")
+    except Exception as e:
+        messagebox.showerror("Lỗi", "Đã xảy ra lỗi: {}".format(str(e)))
     
 def addFileJson(ques, res, tag):
-    fi=open("intents.json", 'r')
-    data=json.load(fi)
-    field=[{'tag': tag,
-           'patterns': [ques],
-           'responses':[res],
-           'context':[""]}]
-    intent_file=data['intents']+field
-    new_file={"intents":intent_file}
-    a_file = open("intents.json", "w")
-    json.dump(new_file, a_file)
-    a_file.close()
-    print(data['intents'][0])
+    try:
+        fi = open("intents.json", 'r')
+        data = json.load(fi)
+        field = [{'tag': tag,
+                  'patterns': [ques],
+                  'responses': [res],
+                  'context': [""]}]
+        intent_file = data['intents'] + field
+        new_file = {"intents": intent_file}
+        a_file = open("intents.json", "w")
+        json.dump(new_file, a_file)
+        a_file.close()
+    except Exception as e:
+        messagebox.showerror("Lỗi", "Đã xảy ra lỗi: {}".format(str(e)))
+        
 base = Tk()
 base.title("Hello")
 base.geometry("400x500")
