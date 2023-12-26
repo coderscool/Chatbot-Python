@@ -10,6 +10,7 @@ model = load_model('chatbot_model.h5')
 import json
 import random
 intents = json.loads(open('intents.json').read())
+stores = json.loads(open('storys.json').read())
 words = pickle.load(open('words.pkl','rb'))
 classes = pickle.load(open('classes.pkl','rb'))
 print(model)
@@ -68,11 +69,13 @@ def chatbot_response(msg):
             elif option.lower() == 'query':
                 search_google(msg)
                 res = 'Tìm kiếm trên Google với từ khoá: "{}"'.format(msg)
+                addStory(msg,res)
             else:
                 res = 'Lựa chọn không hợp lệ. Vui lòng nhập "add" hoặc "query".'
             return res
         else:
             res = getResponse(ints, intents)
+            addStory(msg,res)
             return res
     except Exception as e:
         return 'Đã xảy ra lỗi: {}'.format(str(e))
@@ -115,6 +118,16 @@ def create():
             messagebox.showwarning("Cảnh báo", "Vui lòng nhập đầy đủ thông tin.")
     except Exception as e:
         messagebox.showerror("Lỗi", "Đã xảy ra lỗi: {}".format(str(e)))
+
+def addStory(msg,res):
+    data=[{'message': msg,
+           'response': res}]
+    print(data)
+    store_file = stores['store']+data
+    new_file = {"store": store_file}
+    a_file = open("storys.json", "w")
+    json.dump(new_file, a_file)
+    a_file.close()
     
 def addFileJson(ques, res, tag):
     try:
@@ -149,7 +162,6 @@ SendButton = Button(base, font=("Verdana",12,'bold'), text="Send", width="12", h
                     command= send )
 
 EntryBox = Text(base, bd=0, bg="white",width="29", height="5", font="Arial")
-
 scrollbar.place(x=376,y=6, height=386)
 ChatLog.place(x=6,y=6, height=386, width=370)
 EntryBox.place(x=128, y=401, height=90, width=265)

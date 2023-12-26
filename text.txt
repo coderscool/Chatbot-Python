@@ -1,0 +1,58 @@
+Bản phân tích chương trình của nhóm
+Link Code: https://www.youtube.com/watch?v=1lwddP0KUEg
+I.Chức năng chương trình ban đầu
+-Tạo ra chatbot qua việc huấn luyện nội dung thông qua file intents.json
+II.Các hàm cần thiết của chương trình
+•	NLTK (Natural Language Toolkit):
+	Tác dụng: NLTK là một thư viện quan trọng cho xử lý ngôn ngữ tự nhiên trong Python. Nó cung cấp các công cụ để tiền xử lý văn bản, phân tích cú pháp, và xử lý ngôn ngữ tự nhiên.
+	Câu lệnh được sử dụng:
+	nltk.word_tokenize(sentence): Chia câu thành các từ riêng biệt.
+	nltk.stem.WordNetLemmatizer(): Sử dụng để chuẩn hóa các từ về dạng gốc của chúng.
+•	Keras (được cài đặt qua TensorFlow):
+	Tác dụng: Keras là một thư viện mạng nơ-ron cao cấp giúp xây dựng và huấn luyện các mô hình học máy, trong trường hợp này là một mô hình chatbot.
+	Câu lệnh được sử dụng:
+	load_model('chatbot_model.h5'): Load mô hình chatbot đã được huấn luyện từ tệp tin 'chatbot_model.h5'.
+	Sequential(): Tạo một mô hình mạng nơ-ron tuần tự.
+	Dense(): Thêm một lớp fully connected.
+	model.compile(): Cấu hình quá trình huấn luyện với hàm mất mát và thuật toán tối ưu hóa.
+	model.fit(): Huấn luyện mô hình với dữ liệu huấn luyện đã chuẩn bị.
+•	NumPy:
+	Tác dụng: NumPy là một thư viện quan trọng cho tính toán khoa học và toán học trong Python, đặc biệt là khi xử lý mảng số.
+	Câu lệnh được sử dụng:
+	np.array(): Chuyển đổi danh sách thành mảng NumPy.
+•	JSON:
+	Tác dụng: JSON là một định dạng dữ liệu phổ biến được sử dụng để truyền tải dữ liệu giữa các hệ thống.
+	Câu lệnh được sử dụng:
+	json.loads(data_file): Đọc một chuỗi JSON từ tệp và chuyển đổi nó thành cấu trúc dữ liệu Python.
+•	Tkinter:
+	Tác dụng: Tkinter là thư viện đồ họa người dùng cơ bản trong Python, cho phép tạo giao diện người dùng GUI.
+	Câu lệnh được sử dụng:
+	Tk(), Text(), Button(), Entry(): Tạo cửa sổ, ô văn bản, nút và hộp nhập liệu cho giao diện chatbot.
+	place(): Định vị các phần tử trên giao diện người dùng.
+	mainloop(): Chạy vòng lặp chính của giao diện người dùng.
+•	Pickle:
+	Tác dụng: Thư viện pickle được sử dụng để lưu trữ và truy xuất dữ liệu Python dưới dạng các tệp nhị phân.
+	Câu lệnh được sử dụng:
+	pickle.load(file): Đọc dữ liệu từ tệp tin nhị phân.
+	pickle.dump(data, file): Lưu trữ dữ liệu Python vào tệp nhị phân.
+•	Webbrowser:
+	Tác dụng: Thư viện Webbrowser được sử dụng để mở các URL hoặc trang web trong trình duyệt mặc định của hệ thống.
+	Câu lệnh được sử dụng:
+	webbrowser.open(url) : Mở URL được cung cấp trong trình duyệt mặc định.
+•	Googletrans:
+	Tác dụng: Thư viện Webbrowser được sử dụng để dịch ngôn ngữ này sang ngôn ngữ khác
+	Câu lệnh được sử dụng:
+	translator.translate(sentence, src='en', dest='vi') : Chuyển từ khóa sentence từ tiếng anh sang tiếng việt.
+III.Ý tưởng phát triển thuật toán
+1.Thêm vào giao diện Gui cho phép nhập câu hỏi và hiển thị phản hồi
+2.Thêm khả năng hiểu được câu hỏi bằng ngôn ngữ khác (trường hợp này là tiếng việt)
+3.Cho phép tìm kết quả trên google nếu ko tìm thấy kết quả
+4.Cho phép thêm dữ liệu bạn muốn vào file huấn luyên
+
+
+
+
+•	Googletrans:
+•	Tác dụng: Googletrans là một thư viện dịch máy cho phép văn bản từ ngôn ngữ này sang ngôn ngữ khác.
+•	Câu lệnh được sử dụng:
+•	translator.translate(text, src='language', dest='language'): Dịch một đoạn văn bản từ ngôn ngữ nguồn 
