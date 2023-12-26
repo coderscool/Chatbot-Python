@@ -51,8 +51,3 @@ III.Ý tưởng phát triển thuật toán
 
 
 
-
-•	Googletrans:
-•	Tác dụng: Googletrans là một thư viện dịch máy cho phép văn bản từ ngôn ngữ này sang ngôn ngữ khác.
-•	Câu lệnh được sử dụng:
-•	translator.translate(text, src='language', dest='language'): Dịch một đoạn văn bản từ ngôn ngữ nguồn 
